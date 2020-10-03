@@ -117,6 +117,10 @@ const gameLoop = async () => {
     els.endScreen.style.display = "";
 
     const shouldStopPlaying = await new Promise((resolve) => {
+      // Event listeners are added in a loop. Seems important to remove existing listeners.
+      // Otherwise performance might degrade (as event listeners accumulate) if we choose
+      // to continue playing?
+
       els.playAgain.addEventListener("click", function keepPlayingHandler(e) {
         e.target.removeEventListener("click", keepPlayingHandler);
         resolve(false);
