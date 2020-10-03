@@ -12,11 +12,6 @@ const createOptions = (correctAnswer, incorrectAnswers) => {
   const randomInsertionIndex = Math.floor(Math.random() * options.length);
   options.splice(randomInsertionIndex, 0, correctAnswer);
 
-  console.assert(
-    !Number.isNaN(+randomInsertionIndex),
-    `Expected numeric index ${randomInsertionIndex}`
-  );
-
   return {
     correctIndex: randomInsertionIndex,
     options,
