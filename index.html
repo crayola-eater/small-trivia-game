@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Trivia!</title>
+    <script src="js/main.js" type="module" defer></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <header id="heading-container">
+      <h1 class="font-wacky">Welcome to Trivia!</h1>
+    </header>
+    <main id="question-container">
+      <section>
+        <p id="question-number" class="font-wacky"></p>
+        <p id="question"></p>
+      </section>
+      <div id="options-container">Just a moment, getting questions...</div>
+    </main>
+    <section id="progress-container">
+      <div id="winnings-container">
+        <p class="font-wacky">Your winnings 💰</p>
+        <p id="score" class="font-wacky"></p>
+      </div>
+      <!-- <div id="success-meter"></div> -->
+    </section>
+    <div id="end-screen" class="overlay" style="display: none">
+      <section class="overlay-modal">
+        <div class="overlay-modal__text-container">
+          <p class="font-wacky">
+            Thanks for playing
+            <span class="font-wacky">Trivia</span>.
+          </p>
+          <p class="font-wacky">Not gonna lie, the winnings were never real.</p>
+          <p class="font-wacky">
+            But here's a dad joke in return for your time and efforts.
+          </p>
+        </div>
+        <blockquote id="dad-joke"></blockquote>
+        <div class="overlay-modal__buttons-container">
+          <button class="font-wacky" id="play-again">Play again</button>
+          <button class="font-wacky" id="never-again">
+            Never speak to me again
+          </button>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
