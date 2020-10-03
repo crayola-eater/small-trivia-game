@@ -96,6 +96,7 @@ const runGameOnce = async () => {
 
     if (outcome.optionIndex === question.correctIndex) {
       m.$state.score += question.prize;
+      m.score.textContent = `£${m.$state.score}`;
     }
   }
 };
