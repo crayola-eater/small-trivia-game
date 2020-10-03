@@ -176,9 +176,6 @@ button:active {
   margin: 1.5rem 0;
   font-style: italic;
   letter-spacing: 0.1rem;
-  /* box-shadow: 0 0 10px rgba(10, 10, 10, 0.1) inset; */
-  /* border: 2px solid rgba(10, 10, 10, 0.1); */
-  /* background-color: rgba(10, 10, 10, 0.1); */
   padding: 1rem;
   border-radius: 5px;
 }
