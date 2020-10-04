@@ -58,8 +58,8 @@ const runGameOnce = async () => {
     m.question.textContent = question.question;
     m.score.textContent = `£${m.$state.score}`;
 
-    const ul = createOptionsFromQuestion(question);
-    m.options.appendChild(ul);
+    const optionsContainer = createOptionsFromQuestion(question);
+    m.options.appendChild(optionsContainer);
 
     const correctOption = m.options.querySelector(
       `button:nth-of-type(${question.correctIndex + 1})`
@@ -70,7 +70,7 @@ const runGameOnce = async () => {
     //  • user answers the question (irrespective of whether correct or incorrect).
     const outcome = await Promise.any([
       userRanOutOfTime(question.durationInSeconds * 1e3),
-      userAnsweredTheQuestion(ul),
+      userAnsweredTheQuestion(optionsContainer),
     ]);
 
     if (outcome.answered) {
