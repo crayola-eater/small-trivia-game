@@ -21,15 +21,15 @@ const createOptions = (correctAnswer, incorrectAnswers) => {
 const getTriviaQuestions = async (token, difficulty, amount) => {
   // Should return an array of objects
   // wherein each object represents a "question".
-  if (
+  if (!token) {
+    throw new Error(`Invalid token = ${token}`);
+  } else if (
     "number" !== typeof amount ||
     !(amount >= 1 && amount <= 50 && amount % 1 === 0)
   ) {
     throw new Error(`Invalid amount = ${amount}`);
   } else if (!/^(easy|medium|hard)$/.test(difficulty)) {
     throw new Error(`Invalid difficulty = ${difficulty}`);
-  } else if (!token) {
-    throw new Error(`Invalid token = ${token}`);
   }
   const response = await fetch(
     `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&encode=url3986`
