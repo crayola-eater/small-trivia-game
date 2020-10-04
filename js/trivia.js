@@ -9,7 +9,7 @@ const createOptions = (correctAnswer, incorrectAnswers) => {
     .sort((a, b) => a.sort - b.sort)
     .map((a) => a.value);
 
-  const randomInsertionIndex = Math.floor(Math.random() * options.length);
+  const randomInsertionIndex = Math.round(Math.random() * options.length);
   options.splice(randomInsertionIndex, 0, correctAnswer);
 
   return {
