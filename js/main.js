@@ -12,8 +12,9 @@ const userRanOutOfTime = (duration = 3e3) => {
 
 const userAnsweredTheQuestion = (el) => {
   return new Promise((resolve) => {
-    el.addEventListener("click", (e) => {
+    el.addEventListener("click", function choiceHandler(e) {
       if (e.target.tagName === "BUTTON") {
+        el.removeEventListener("click", choiceHandler);
         resolve({
           answered: true,
           optionIndex: +e.target.dataset.optionIndex,
@@ -120,15 +121,15 @@ const gameLoop = async () => {
       // Event listeners are added in a loop. Seems important to remove existing listeners.
       // Otherwise performance might degrade (as event listeners accumulate) if we choose
       // to continue playing?
+      // The "once" option below should automatically remove the event listener after
+      // the callback has been invoked once.
+      // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 
-      els.playAgain.addEventListener("click", function keepPlayingHandler(e) {
-        e.target.removeEventListener("click", keepPlayingHandler);
-        resolve(false);
+      els.playAgain.addEventListener("click", () => resolve(false), {
+        once: true,
       });
-
-      els.neverAgain.addEventListener("click", function stopPlayingHandle(e) {
-        e.target.removeEventListener("click", stopPlayingHandle);
-        resolve(true);
+      els.neverAgain.addEventListener("click", () => resolve(true), {
+        once: true,
       });
     });
 
