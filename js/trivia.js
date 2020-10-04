@@ -31,6 +31,7 @@ const getTriviaQuestions = async (token, difficulty, amount) => {
   } else if (!/^(easy|medium|hard)$/.test(difficulty)) {
     throw new Error(`Invalid difficulty = ${difficulty}`);
   }
+
   const response = await fetch(
     `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&encode=url3986`
   );
