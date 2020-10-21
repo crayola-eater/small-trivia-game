@@ -132,7 +132,7 @@ const runGameOnce = async () => {
 };
 
 /**
- * Should continue running the game until the playee wishes to stop.
+ * Should continue running the game until the player wishes to stop.
  */
 const gameLoop = async () => {
   const els = {
