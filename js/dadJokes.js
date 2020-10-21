@@ -1,5 +1,5 @@
 /**
- * @file Functions for interacting with dad jokes API.
+ * @file Functions(s) for interacting with dad jokes API.
  *
  */
 

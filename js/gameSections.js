@@ -1,5 +1,5 @@
 /**
- * Should return an object which returns a "game section", which will dictate how
+ * Should return an object which represents a "game section", which will dictate how
  * the game progresses. Questions will (later/somewhere else) be fetched according
  * to these sections.
  * @param {{difficulty: string, durationInSeconds: number, prizes: number[]}} options
