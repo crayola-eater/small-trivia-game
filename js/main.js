@@ -2,6 +2,12 @@ import defaultGameSections from "./gameSections.js";
 import getTriviaQuestionsForGameSections from "./trivia.js";
 import getDadJoke from "./dadJokes.js";
 
+/**
+ * Should return a promise that automatically resolves after some duration.
+ * The promise's resolved value will be an object that indicates that the
+ * user did not answer.
+ * @param {number} duration
+ */
 const userRanOutOfTime = (duration = 3e3) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -10,6 +16,18 @@ const userRanOutOfTime = (duration = 3e3) => {
   });
 };
 
+/**
+ * Should return a promise that resolves when a user clicks
+ * a button.
+ *
+ * The promise's resolved value will be an object that
+ * indicates that the user answered and what their time was.
+ *
+ * To avoid adding/removing event listeners for each
+ * button, event delegation is used. Hence, the event listener is only
+ * attached to the parent/ancestor (and removed upon button click).
+ * @param {HTMLElement} el
+ */
 const userAnsweredTheQuestion = (el) => {
   return new Promise((resolve) => {
     el.addEventListener("click", function choiceHandler(e) {
@@ -24,6 +42,11 @@ const userAnsweredTheQuestion = (el) => {
   });
 };
 
+/**
+ * Should return a HTML element which itself contains a button
+ * for each option in the question.
+ * @param {{options: [...]}} question
+ */
 const createOptionsFromQuestion = (question) => {
   const container = document.createElement("div");
 
@@ -37,9 +60,15 @@ const createOptionsFromQuestion = (question) => {
   return container;
 };
 
-// Small function to introduce non-blocking pauses (where needed).
+/**
+ * Small function to introduce a non-blocking delay (where appropriate).
+ * @param {number} ms
+ */
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/**
+ * Should run the game once.
+ */
 const runGameOnce = async () => {
   const m = {
     questionNumber: document.querySelector("#question-number"),
@@ -66,7 +95,7 @@ const runGameOnce = async () => {
       `button:nth-of-type(${question.correctIndex + 1})`
     );
 
-    // Wait for any of the following to happen (whichever happens FIRST)
+    // Wait for any of the following to happen (whichever happens first)
     //  • user runs out of time
     //  • user answers the question (irrespective of whether correct or incorrect).
     const outcome = await Promise.any([
@@ -102,6 +131,9 @@ const runGameOnce = async () => {
   }
 };
 
+/**
+ * Should continue running the game until the playee wishes to stop.
+ */
 const gameLoop = async () => {
   const els = {
     endScreen: document.querySelector("#end-screen"),

@@ -1,9 +1,14 @@
-// Functions for interacting with Trivia DB API.
+/**
+ * @file Functions for interacting with Trivia DB API.
+ */
 
+/**
+ * Should return an object that contains an array of options
+ * and the array index at which the correct option is.
+ * @param {string} correctAnswer
+ * @param {string[]} incorrectAnswers
+ */
 const createOptions = (correctAnswer, incorrectAnswers) => {
-  // Should return an object containing an array of options
-  // and the index of the correct option (among the array).
-
   const options = incorrectAnswers
     .map((a) => ({ sort: Math.random(), value: a }))
     .sort((a, b) => a.sort - b.sort)
@@ -18,6 +23,14 @@ const createOptions = (correctAnswer, incorrectAnswers) => {
   };
 };
 
+/**
+ * Should return a promise that resolves to an array of
+ * objects, where each object represents a question
+ * (and its corresponding options).
+ * @param {string} token
+ * @param {string} difficulty
+ * @param {number} amount
+ */
 const getTriviaQuestions = async (token, difficulty, amount) => {
   // Should return an array of objects
   // wherein each object represents a "question".
@@ -50,6 +63,13 @@ const getTriviaQuestions = async (token, difficulty, amount) => {
   });
 };
 
+/**
+ * Should return a promise that resolves to a string (representing
+ * the API token).
+ *
+ * This function is not pure. It will attempt to persist/cache
+ * the token to session storage (to minimise).
+ */
 const getTriviaApiToken = async () => {
   const SESSION_STORAGE_KEY = "triviaDbApiToken";
 
@@ -76,12 +96,13 @@ const getTriviaApiToken = async () => {
   return parsed.token;
 };
 
+/**
+ * Should return an asynchronous generator that generates a
+ * sequence of questions that the call site can iterate over easily.
+ * @param {object[]} gameSections
+ */
 const getTriviaQuestionsForGameSections = async function* (gameSections) {
-  // Should generate a sequence of questions that the call site
-  // can iterate over easily.
-
   const apiToken = await getTriviaApiToken();
-
   let questionIndex = 0;
 
   // TODO: There is a (noticeable) delay between each section (as each section requires its own fetch request).
