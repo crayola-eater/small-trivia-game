@@ -28,7 +28,7 @@ const createOptions = (correctAnswer, incorrectAnswers) => {
  * objects, where each object represents a question
  * (and its corresponding options).
  * @param {string} token
- * @param {string} difficulty
+ * @param {"easy" | "medium" | "hard"} difficulty
  * @param {number} amount
  */
 const getTriviaQuestions = async (token, difficulty, amount) => {

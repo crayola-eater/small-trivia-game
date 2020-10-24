@@ -52,4 +52,4 @@ const hard = createGameSection({
 /**
  * Should export an array of game sections.
  */
-export default Object.freeze([easy, medium, hard]);
+export const defaultGameSections = Object.freeze([easy, medium, hard]);

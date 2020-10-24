@@ -6,7 +6,7 @@
 /**
  * Should return a joke from the Dad Jokes API.
  */
-export default async () => {
+export const getDadJoke = async () => {
   const response = await fetch("https://icanhazdadjoke.com/", {
     headers: {
       Accept: "application/json",

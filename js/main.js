@@ -1,6 +1,6 @@
-import defaultGameSections from "./gameSections.js";
+import { defaultGameSections } from "./gameSections.js";
 import getTriviaQuestionsForGameSections from "./trivia.js";
-import getDadJoke from "./dadJokes.js";
+import { getDadJoke } from "./dadJokes.js";
 
 /**
  * Should return a promise that automatically resolves after some duration.
@@ -8,7 +8,7 @@ import getDadJoke from "./dadJokes.js";
  * user did not answer.
  * @param {number} duration
  */
-const userRanOutOfTime = (duration = 3e3) => {
+const userRanOutOfTime = (duration = 3000) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({ answered: false });
@@ -35,7 +35,7 @@ const userAnsweredTheQuestion = (el) => {
         el.removeEventListener("click", choiceHandler);
         resolve({
           answered: true,
-          optionIndex: +e.target.dataset.optionIndex,
+          optionIndex: parseInt(e.target.dataset.optionIndex, 10),
         });
       }
     });
@@ -62,36 +62,34 @@ const createOptionsFromQuestion = (question) => {
 
 /**
  * Small function to introduce a non-blocking delay (where appropriate).
- * @param {number} ms
+ * @param {number} milliseconds
  */
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (milliseconds) =>
+  new Promise((resolve) => setTimeout(resolve, milliseconds));
 
-/**
- * Should run the game once.
- */
 const runGameOnce = async () => {
-  const m = {
+  const model = {
+    score: 0,
+  };
+  const elements = {
     questionNumber: document.querySelector("#question-number"),
     question: document.querySelector("#question"),
     options: document.querySelector("#options-container"),
     score: document.querySelector("#score"),
-    $state: {
-      score: 0,
-    },
   };
 
   const questions = getTriviaQuestionsForGameSections(defaultGameSections);
 
   for await (const question of questions) {
-    m.options.innerHTML = "";
-    m.questionNumber.textContent = `Question #${question.index} for £${question.prize}`;
-    m.question.textContent = question.question;
-    m.score.textContent = `£${m.$state.score}`;
+    elements.options.innerHTML = "";
+    elements.questionNumber.textContent = `Question #${question.index} for £${question.prize}`;
+    elements.question.textContent = question.question;
+    elements.score.textContent = `£${model.score}`;
 
     const optionsContainer = createOptionsFromQuestion(question);
-    m.options.appendChild(optionsContainer);
+    elements.options.appendChild(optionsContainer);
 
-    const correctOption = m.options.querySelector(
+    const correctOption = elements.options.querySelector(
       `button:nth-of-type(${question.correctIndex + 1})`
     );
 
@@ -99,16 +97,16 @@ const runGameOnce = async () => {
     //  • user runs out of time
     //  • user answers the question (irrespective of whether correct or incorrect).
     const outcome = await Promise.any([
-      userRanOutOfTime(question.durationInSeconds * 1e3),
+      userRanOutOfTime(question.durationInSeconds * 1000),
       userAnsweredTheQuestion(optionsContainer),
     ]);
 
     if (outcome.answered) {
-      const selectedOption = m.options.querySelector(
+      const selectedOption = elements.options.querySelector(
         `button:nth-of-type(${outcome.optionIndex + 1})`
       );
       selectedOption.classList.add("option-selected");
-      await sleep(1e3);
+      await sleep(1000);
     }
 
     // TODO: try to replace the below with CSS3 animations + keyframes
@@ -125,8 +123,8 @@ const runGameOnce = async () => {
     await sleep(500);
 
     if (outcome.optionIndex === question.correctIndex) {
-      m.$state.score += question.prize;
-      m.score.textContent = `£${m.$state.score}`;
+      model.score += question.prize;
+      elements.score.textContent = `£${model.score}`;
     }
   }
 };
@@ -135,7 +133,7 @@ const runGameOnce = async () => {
  * Should continue running the game until the player wishes to stop.
  */
 const gameLoop = async () => {
-  const els = {
+  const elements = {
     endScreen: document.querySelector("#end-screen"),
     playAgain: document.querySelector("#play-again"),
     neverAgain: document.querySelector("#never-again"),
@@ -144,10 +142,11 @@ const gameLoop = async () => {
 
   while (true) {
     await runGameOnce();
-    const [{ joke: dadJoke }] = await Promise.all([getDadJoke(), sleep(1e3)]);
+    // Wait at least 1 second between game ending and showing the dad joke.
+    const [{ joke: dadJoke }] = await Promise.all([getDadJoke(), sleep(1000)]);
 
-    els.dadJoke.textContent = `"${dadJoke}"`;
-    els.endScreen.style.display = "";
+    elements.dadJoke.textContent = `"${dadJoke}"`;
+    elements.endScreen.style.display = "";
 
     const shouldStopPlaying = await new Promise((resolve) => {
       // Event listeners are added in a loop. Seems important to remove existing listeners.
@@ -157,15 +156,15 @@ const gameLoop = async () => {
       // the callback has been invoked once.
       // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 
-      els.playAgain.addEventListener("click", () => resolve(false), {
+      elements.playAgain.addEventListener("click", () => resolve(false), {
         once: true,
       });
-      els.neverAgain.addEventListener("click", () => resolve(true), {
+      elements.neverAgain.addEventListener("click", () => resolve(true), {
         once: true,
       });
     });
 
-    els.endScreen.style.display = "none";
+    elements.endScreen.style.display = "none";
 
     if (shouldStopPlaying) {
       break;
